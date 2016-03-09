@@ -1,6 +1,6 @@
 angular.module('cgPrompt',['ui.bootstrap']);
 
-angular.module('cgPrompt').factory('prompt',['$modal','$q',function($modal,$q){
+angular.module('cgPrompt').factory('prompt',['$uibModal','$q',function($uibModal,$q){
 
     var prompt = function(options){
 
@@ -11,6 +11,7 @@ angular.module('cgPrompt').factory('prompt',['$modal','$q',function($modal,$q){
             label: '',
             value: '',
             values: false,
+            animation: false,
             buttons: [
                 {label:'Cancel',cancel:true},
                 {label:'OK',primary:true}
@@ -29,9 +30,10 @@ angular.module('cgPrompt').factory('prompt',['$modal','$q',function($modal,$q){
 
         var defer = $q.defer();
 
-        $modal.open({
+        $uibModal.open({
             templateUrl:'angular-prompt.html',
             controller: 'cgPromptCtrl',
+            animation: options.animation,
             resolve: {
                 options:function(){ 
                     return options; 
@@ -54,11 +56,12 @@ angular.module('cgPrompt').factory('prompt',['$modal','$q',function($modal,$q){
 	}
 ]);
 
-angular.module('cgPrompt').controller('cgPromptCtrl',['$scope','options','$timeout',function($scope,options,$timeout){
+angular.module('cgPrompt').controller('cgPromptCtrl',['$scope','options','$timeout', '$sce', function($scope,options,$timeout, $sce){
 
     $scope.input = {name:options.value};
 
     $scope.options = options;
+    $scope.options.message = $sce.trustAsHtml($scope.options.message);
 
     $scope.buttonClicked = function(button){
         if (button.cancel){

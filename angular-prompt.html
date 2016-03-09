@@ -5,9 +5,7 @@
     </div>
     <div class="modal-body">
 
-        <p ng-if="options.message">
-            {{options.message}}
-        </p>
+        <div ng-if="options.message" ng-bind-html="options.message"></div>
 
         <form id="cgPromptForm" name="cgPromptForm" ng-if="options.input" ng-submit="submit()">
             <div class="form-group" ng-class="{'has-error':cgPromptForm.$invalid && changed}">
